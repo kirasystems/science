@@ -5,7 +5,7 @@ This repository contains links to source code and data agreements for replicatio
 Please feel free to contact the authors or post an issue on this repository if you have questions or concerns.
 
 ## A Dataset and an Examination of Identifying Passages for Due Diligence
-*Adam Roegiest, Alexander K. Hudek, and Anne McNulty*
+*Adam Roegiest, Alexander K. Hudek, and Anne McNulty*  
 SIGIR 2018
 
 We present and formalize the due diligence problem, where lawyers extract data from legal documents to assess risk in a potential merger or acquisition, as an information retrieval task. Furthermore, we describe the creation and annotation of a document collection for the due diligence problem that will foster research in this area. This dataset comprises 50 topics over 4,412 documents and ~15 million sentences and is a subset of our own internal training data.
