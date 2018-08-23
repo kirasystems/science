@@ -3,7 +3,7 @@
 SIGIR 2018
 
 ## Data Collection
-The Kira Systems collection is being made available to researchers for non-commericial use. To gain access to the collection, researchers are required to fill out and submit [this](https://kirasystems.com/files/Kira-Systems-Information-Release-Application.pdf) agreement to `science at kirasystems.com`. Upon receipt and successful processing of the executed agreement, researchers will be provided access to a download system that will enable them to retrieve the test collection. Specific instructions will be provided in the follow-up email. 
+The Kira Systems collection is being made available to researchers for non-commericial use. To gain access to the collection, researchers are required to fill out and submit [this](https://kirasystems.com/files/Kira-Systems-Information-Release-Application.pdf) agreement to `science at kirasystems dot com`. Upon receipt and successful processing of the executed agreement, researchers will be provided access to a download system that will enable them to retrieve the test collection. Specific instructions will be provided in the follow-up email. 
 
 ### Collection Details
 
