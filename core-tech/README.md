@@ -3,7 +3,7 @@
 SIGIR 2018
 
 ## Data Collection
-The Kira Systems collection is being made available to researchers for non-commericial use. To gain access to the collection, researchers are required to fill out and submit this agreement to XXX. Upon receipt and successful processing of the executed agreement, researchers will be provided access to a download system that will enable them to retrieve the test collection. Specific instructions will be provided in the follow-up email. 
+The Kira Systems collection is being made available to researchers for non-commericial use. To gain access to the collection, researchers are required to fill out and submit [this](https://kirasystems.com/files/Kira-Systems-Information-Release-Application.pdf) agreement to `science at kirasystems.com`. Upon receipt and successful processing of the executed agreement, researchers will be provided access to a download system that will enable them to retrieve the test collection. Specific instructions will be provided in the follow-up email. 
 
 ### Collection Details
 
@@ -27,7 +27,7 @@ A full worked example follows:
 > cd /mnt/data/core-tech/scripts
 > bash run_crf_tuned.sh 1086 /mnt/data/core
 ... 
-> bash per_sentence.sh 1086 crf-tuned
+> bash sentence_level.sh 1086 crf-tuned
 543 24 51 0.914141412602 0.957671955983 0.935400015455
 > bash annotation_level.sh 1086 crf-tuned
 83 3 5 0.943181807464 0.965116267847 0.954022477606
