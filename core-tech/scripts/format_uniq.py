@@ -5,11 +5,13 @@ fp=0
 fn=0
 for line in sys.stdin:
   count,gold,pred = line.strip().split()
-  if (gold != "1" and gold == pred):
+  gold = int(gold)
+  pred = int(float(pred))
+  if (gold != 1 and gold == pred):
     continue
-  elif (gold != "1"):
+  elif (gold != 1):
     fp = int(count)
-  elif (pred != "1"):
+  elif (pred != 1):
     fn = int(count)
   else:
     tp = int(count)
