@@ -151,18 +151,18 @@ def Preprocess_IMDB(path="datasets/raw/aclImdb/"):
   Args:
     path: Path to directory containing raw IMDB dataset
   """
-  output_path = "test"
+  output_path = "datasets/preprocessed/IMDB_Data"
 
   neg = glob.glob(os.path.join(path, 'test', 'neg', '*'))
   neg += glob.glob(os.path.join(path, 'train', 'neg', '*'))
   neg_data = [io.open(fname, 'r', encoding='utf-8').readlines() for fname in neg]
-  neg_data = [sentence[0].strip() for sentence in neg_data]
+  neg_data = [sentence[0] for sentence in neg_data]
 
 
   pos = glob.glob(os.path.join(path, 'test', 'pos', '*'))
   pos += glob.glob(os.path.join(path, 'train', 'pos', '*'))
   pos_data = [io.open(fname, 'r', encoding='utf-8').readlines() for fname in pos]
-  pos_data = [sentence[0].strip() for sentence in pos_data]
+  pos_data = [sentence[0] for sentence in pos_data]
 
   labels = compute_labels(pos_data, neg_data)
   text, labels = shuffle_data(pos_data + neg_data, labels)
@@ -202,6 +202,6 @@ def Preprocess_IMDB(path="datasets/raw/aclImdb/"):
 
 if __name__ == "__main__":
 
-  # Preprocess_MR()
-  # Preprocess_CR()
+  Preprocess_MR()
+  Preprocess_CR()
   Preprocess_IMDB()
