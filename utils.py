@@ -35,7 +35,7 @@ def find_trainable_variables(key):
         tf.GraphKeys.TRAINABLE_VARIABLES, ".*{}.*".format(key))
 
 
-def load_sst(path):
+def load_dataset(path):
     data = pd.read_csv(path, encoding='utf-8')
     X = data['sentence'].values.tolist()
     Y = data['label'].values
