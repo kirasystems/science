@@ -8,108 +8,70 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 
-from utils import load_sst
+from utils import load_dataset
 from sklearn.linear_model import LogisticRegression
 
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
-    '--raw_data_path', type=str, default="datasets/preprocessed/IMDB_Data",
-    help="Path to directory containing labels")
+    '--raw_data_path', type=str, default="datasets/preprocessed/Stanford_Data",
+    help="Path to directory of dataset, to get labels")
 parser.add_argument(
-    '--features_path', type=str, default="features/IMDB/openai_list/padded/final",
-    help="Path to directory containing features")
-parser.add_argument(
-    '--munged_path', type=str, default="features/IMDB/openai_list/padded/mean_final_neg_10",
-    help="Path to directory containing features") # HACK to evaluate munged features
-
-parser.add_argument(
-    '--uniq_output', type=str, default="SN_only",
-    help="Give a unique name to store output")
-
-parser.add_argument(
-    '--select_neuron', type=int, default=None,
+    '--features_path', type=str, default="features/Stanford/openai_list/padded/final",
     help="Path to directory containing features")
 
 parser.add_argument(
-    '--ablation_path', type=str, default=None,
-    help="Path to directory containing coef.npy from classifier to identify prominent features")
-parser.add_argument(
-    '--top_N', type=int, default=None,
-    help="Choose the top N largest features (by magnitude) from the linear model weights from ablation path")
-
-parser.add_argument(
-    '--ablation_intersect', type=str, default=None,
-    help="Path to directory containing coef.npy from classifier to identify prominent features")
-parser.add_argument(
-    '--top_N_intersect', type=int, default=None,
-    help="Select the top_N features which intesect from a classifer trained on two sets of features")
+    '--uniq_output', type=str, default="test",
+    help="Give a unique name to output directory, this is saved inside the --features_path folder")
 
 parser.add_argument(
     '--delete_selected', type=int, default=1,
     help="If 1, delete selected neurons, if 0, delete everything except selected neurons")
+parser.add_argument(
+    '--select_neuron', type=int, default=2,
+    help="Select neuron index to be isolated or deleted")
 
 args = parser.parse_args()
 
-# coef_path = os.path.join(args.ablation_path, "results/coef.npy")
-#
-# coef = np.load(coef_path)
-# coef = np.squeeze(coef)
-
-# sorted magnitude vals and indices of weights in descending order
-# coef_vals = np.sort(abs(coef))[::-1]
-# coef_idxs = np.argsort(abs(coef))[::-1]
-
 # save the results in same dir as tha features
-output = os.path.join(args.features_path, "all_but_one_results", args.uniq_output) # HACK
+output = os.path.join(args.features_path, args.uniq_output)
 
 if not os.path.exists(output):
   os.makedirs(output)
 
 # load all the features
-trX, trY = load_sst(os.path.join(args.raw_data_path, "train_binary_sent.csv"))
-teX, teY = load_sst(os.path.join(args.raw_data_path, "test_binary_sent.csv"))
-vaX, vaY = load_sst(os.path.join(args.raw_data_path, "dev_binary_sent.csv"))
+trX, trY = load_dataset(os.path.join(args.raw_data_path, "train_binary_sent.csv"))
+teX, teY = load_dataset(os.path.join(args.raw_data_path, "test_binary_sent.csv"))
+vaX, vaY = load_dataset(os.path.join(args.raw_data_path, "dev_binary_sent.csv"))
 
 trXt = np.load(os.path.join(args.features_path, "train_binary_sent.npy"))
 teXt = np.load(os.path.join(args.features_path, "test_binary_sent.npy"))
 vaXt = np.load(os.path.join(args.features_path, "dev_binary_sent.npy"))
 
+neuron_idxs = np.asarray([args.select_neuron])
 
-#TODO intersects
-
-# neuron_idxs = coef_idxs[0:args.top_N] #HACK this is for top_N ablations
-# print "neuron idxs", neuron_idxs
-
-neuron_idxs = np.asarray([args.select_neuron]) #HACK this is just code to select a single neuron
-
-
-# perform ablation on the features
+# ablation of features
 if args.delete_selected:
-
   print "delete idxs", neuron_idxs
   # delete the selected neurons
   trXt[:, neuron_idxs] = 0
   teXt[:, neuron_idxs] = 0
   vaXt[:, neuron_idxs] = 0
-
 else:
-
   print "keep idxs"
   # keep only the selected neurons
   trXt = trXt[:, neuron_idxs]
   teXt = teXt[:, neuron_idxs]
   vaXt = vaXt[:, neuron_idxs]
 
-
 # classifer code
 penalty='l1'
 seed=42
-
 # regularisation coefficients for hp tuning
 C=2**np.arange(-8, 1).astype(np.float)
 
 scores = []
+
 # choose best c using validation set
 for i, c in enumerate(C):
   model = LogisticRegression(C=c, penalty=penalty, random_state=seed+i)
@@ -168,37 +130,36 @@ test_precision = (test_tp / float(test_tp + test_fp + eps))
 test_accuracy = ((test_tp + test_tn) / float((test_tp + test_tn + test_fp + test_fn + eps)))
 test_f1 = 2 * (test_precision * test_recall) / (test_precision + test_recall + eps)
 
-# # extract original text (excluding padding) for each tp, tn, fp, fn
-# test_tp_text = [teX[i] for i in test_tp_idxs]
-# test_tn_text = [teX[i] for i in test_tn_idxs]
-# test_fp_text = [teX[i] for i in test_fp_idxs]
-# test_fn_text = [teX[i] for i in test_fn_idxs]
-#
-# # save the text on the test set
-# with io.open(os.path.join(output, "test_tp_text"), mode='w', encoding='utf-8') as f:
-#
-#   for idx, review in zip(test_tp_idxs, test_tp_text):
-#     f.write(unicode(idx) + u" " + review)
-#     f.write(u"\n")
-#
-# with io.open(os.path.join(output,"test_tn_text"), mode='w', encoding='utf-8') as f:
-#
-#   for idx, review in zip(test_tn_idxs, test_tn_text):
-#     f.write(unicode(idx) + u" " + review)
-#     f.write(u"\n")
-#
-# with io.open(os.path.join(output,"test_fp_text"), mode='w', encoding='utf-8') as f:
-#
-#   for idx, review in zip(test_fp_idxs, test_fp_text):
-#     f.write(unicode(idx) + u" " + review)
-#     f.write(u"\n")
-#
-# with io.open(os.path.join(output,"test_fn_text"), mode='w', encoding='utf-8') as f:
-#
-#   for idx, review in zip(test_fn_idxs, test_fn_text):
-#     f.write(unicode(idx) + u" " + review)
-#     f.write(u"\n")
+# extract original text for each tp, tn, fp, fn
+test_tp_text = [teX[i] for i in test_tp_idxs]
+test_tn_text = [teX[i] for i in test_tn_idxs]
+test_fp_text = [teX[i] for i in test_fp_idxs]
+test_fn_text = [teX[i] for i in test_fn_idxs]
 
+# save the text on the test set
+with io.open(os.path.join(output, "test_tp_text"), mode='w', encoding='utf-8') as f:
+
+  for idx, review in zip(test_tp_idxs, test_tp_text):
+    f.write(unicode(idx) + u" " + review)
+    f.write(u"\n")
+
+with io.open(os.path.join(output,"test_tn_text"), mode='w', encoding='utf-8') as f:
+
+  for idx, review in zip(test_tn_idxs, test_tn_text):
+    f.write(unicode(idx) + u" " + review)
+    f.write(u"\n")
+
+with io.open(os.path.join(output,"test_fp_text"), mode='w', encoding='utf-8') as f:
+
+  for idx, review in zip(test_fp_idxs, test_fp_text):
+    f.write(unicode(idx) + u" " + review)
+    f.write(u"\n")
+
+with io.open(os.path.join(output,"test_fn_text"), mode='w', encoding='utf-8') as f:
+
+  for idx, review in zip(test_fn_idxs, test_fn_text):
+    f.write(unicode(idx) + u" " + review)
+    f.write(u"\n")
 
 # calculate train_accuracy and other metrics manually
 train_preds = model.predict(trXt)
@@ -264,17 +225,16 @@ with io.open(os.path.join(output,"score.txt"), mode='w', encoding='utf-8') as f:
 
   f.write(u"selected c: " + unicode(c))
 
-# # save the weights and bias in .npy files
-# np.save(os.path.join(output, "coef.npy"), coef)
-# np.save(os.path.join(output, "intercept.npy"), intercept)
-# np.save(os.path.join(output, "test_preds.npy"), test_preds)
-# np.save(os.path.join(output, "train_preds.npy"), train_preds)
-#
-# # sve plot of the logistic regression weights
-# fig, ax = plt.subplots()
-# ax.plot(np.squeeze(coef))
-# ax.set_title("Logistic Regression Weights")
-# ax.set_xlabel("weight idx")
-# ax.set_ylabel("weight value")
-# fig.savefig(os.path.join(output, "weights"))
+# save the weights and bias in .npy files
+np.save(os.path.join(output, "coef.npy"), coef)
+np.save(os.path.join(output, "intercept.npy"), intercept)
+np.save(os.path.join(output, "test_preds.npy"), test_preds)
+np.save(os.path.join(output, "train_preds.npy"), train_preds)
 
+# sve plot of the logistic regression weights
+fig, ax = plt.subplots()
+ax.plot(np.squeeze(coef))
+ax.set_title("Logistic Regression Weights")
+ax.set_xlabel("weight idx")
+ax.set_ylabel("weight value")
+fig.savefig(os.path.join(output, "weights"))
