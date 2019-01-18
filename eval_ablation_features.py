@@ -14,10 +14,10 @@ from sklearn.linear_model import LogisticRegression
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
-    '--raw_data_path', type=str, default="datasets/preprocessed/Stanford_Data",
-    help="Path to directory of dataset, to get labels")
+    '--raw_data_path', type=str, default="datasets/preprocessed/CR_Data",
+    help="Path to directory of dataset to get labels")
 parser.add_argument(
-    '--features_path', type=str, default="features/Stanford/openai_list/padded/final",
+    '--features_path', type=str, default="features/CR/openai_list/padded/mean",
     help="Path to directory containing features")
 
 parser.add_argument(
@@ -25,10 +25,10 @@ parser.add_argument(
     help="Give a unique name to output directory, this is saved inside the --features_path folder")
 
 parser.add_argument(
-    '--delete_selected', type=int, default=1,
-    help="If 1, delete selected neurons, if 0, delete everything except selected neurons")
+    '--delete_selected', type=int, default=None,
+    help="If 1, delete selected neurons, if 0, delete everything except selected neurons, if None don't delete any")
 parser.add_argument(
-    '--select_neuron', type=int, default=2,
+    '--select_neuron', type=int, default=100,
     help="Select neuron index to be isolated or deleted")
 
 args = parser.parse_args()
@@ -51,13 +51,13 @@ vaXt = np.load(os.path.join(args.features_path, "dev_binary_sent.npy"))
 neuron_idxs = np.asarray([args.select_neuron])
 
 # ablation of features
-if args.delete_selected:
+if args.delete_selected == 1:
   print "delete idxs", neuron_idxs
   # delete the selected neurons
   trXt[:, neuron_idxs] = 0
   teXt[:, neuron_idxs] = 0
   vaXt[:, neuron_idxs] = 0
-else:
+if args.delete_selected == 0:
   print "keep idxs"
   # keep only the selected neurons
   trXt = trXt[:, neuron_idxs]
