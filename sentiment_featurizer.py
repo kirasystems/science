@@ -167,7 +167,7 @@ with tf.Session() as sess:
 
   for file in filenames:
 
-    data, labels = utils.load_sst(os.path.join(input_data, file))
+    data, labels = utils.load_dataset(os.path.join(input_data, file))
 
     # add a word to the end of each sentence in the dataset
     if args.munge_data:
