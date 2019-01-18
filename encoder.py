@@ -214,18 +214,10 @@ if __name__ == '__main__':
 
 
     mdl = Model("checkpoints/openai_list/model.npy")
-    x_train, y = load_sst("Stanford_Sentiment_Data/train_binary_sent.csv")
-    x_test, y = load_sst("Stanford_Sentiment_Data/test_binary_sent.csv")
-    x_dev, y = load_sst("Stanford_Sentiment_Data/dev_binary_sent.csv")
+    x_train, y = load_dataset("datasets/preprocessed/CR_Data/train_binary_sent.csv")
+    x_test, y = load_dataset("datasets/preprocessed/CR_Data/test_binary_sent.csv")
+    x_dev, y = load_dataset("datasets/preprocessed/CR_Data/dev_binary_sent.csv")
 
     train_features = mdl.transform(x_train)
     test_features = mdl.transform(x_test)
     dev_features = mdl.transform(x_dev)
-
-
-    save_path = "features/openai_sanity_check/unpadded/final"
-    os.makedirs(save_path)
-
-    np.save(os.path.join(save_path, "train_binary_sent.npy"), train_features)
-    np.save(os.path.join(save_path, "test_binary_sent.npy"), test_features)
-    np.save(os.path.join(save_path, "dev_binary_sent.npy"), dev_features)
