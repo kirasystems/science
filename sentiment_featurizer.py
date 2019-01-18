@@ -17,22 +17,22 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
     '--input_data', type=str, default="datasets/preprocessed/CR_Data",
-    help="Path to directory containing raw field data")
+    help="Path to directory containing preprocessed dataset")
 parser.add_argument(
     '--checkpoint', type=str, default="checkpoints/openai_list/model.npy",
     help="Path to directory containing language model checkpoint")
 parser.add_argument(
-    '--output_dir', type=str, default="features/CR/openai_list/padded/mean_final_neg",
-    help="directory to store features")
+    '--output_dir', type=str, default="test",
+    help="Directory to store features")
 parser.add_argument(
-    '--insert_padding', type=int, default=1,
+    '--insert_padding', type=int, default=0,
     help="Option to pad each input sentence")
 parser.add_argument(
-    '--munge_data', type=int, default=1,
-    help="Option to add noise to each input sentence")
+    '--munge_data', type=int, default=0,
+    help="Option to add noise to each input sentence, uncomment line 166 to munge the test set only")
 parser.add_argument(
     '--end_word', type=str, default=" Terrible",
-    help="Option to add noise to each input sentence")
+    help="Choose word to append to each string")
 
 # language model parameters, must match the model saved in checkpoint
 parser.add_argument(
@@ -55,7 +55,7 @@ parser.add_argument(
     '--abs', type=int, default=0,
     help="extract final state features")
 parser.add_argument(
-    '--mean', type=int, default=1,
+    '--mean', type=int, default=0,
     help="extract mean pooled features")
 parser.add_argument(
     '--max', type=int, default=0,
@@ -162,12 +162,12 @@ with tf.Session() as sess:
   sess.run(tf.global_variables_initializer())
   sess.run(init_op) # this initializes the weights from numpy file checkpoint
 
-  filenames = [os.listdir(input_data)[-1]] #HACK only for munging test sets
+  filenames = [os.listdir(input_data)]
+  # filenames = [os.listdir(input_data)[-1]] #HACK for munging test sets only
 
   for file in filenames:
-    print filenames
+
     data, labels = utils.load_sst(os.path.join(input_data, file))
-    print file
 
     # add a word to the end of each sentence in the dataset
     if args.munge_data:
