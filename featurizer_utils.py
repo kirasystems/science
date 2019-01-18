@@ -261,9 +261,4 @@ def create_example(snt, lbl):
 
   return example
 
-if __name__ == "__main__":
-
-  path = "/Volumes/New/custom-models/3/1086-sentences/1086-0.cache"
-  x_buckets, x_indices, all_labels, sorted_idxs, _ = create_doc_buckets(path, 4)
-
 

@@ -10,7 +10,7 @@ import numpy as np
 parser = argparse.ArgumentParser(
     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument(
-    '--restore_path', type=str, default="checkpoints/openai_pretrained",
+    '--restore_path', type=str, default="checkpoints/model",
     help="Path to directory containing 15 .npy files")
 parser.add_argument(
     '--output', type=str, default="checkpoints/openai_list",

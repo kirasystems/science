@@ -1,4 +1,6 @@
 datasets
-checkpoints
 notes
 cmp*
+*.pyc
+compare_final_states.py
+features
