@@ -1,4 +1,4 @@
-"""Animate the hidden cell state for each time state in a given string"""
+"""Animate the hidden cell state for each time step for a given string"""
 
 import argparse
 import glob
@@ -45,8 +45,8 @@ inputs = tf.placeholder(tf.int32, shape=(None, None)) # shape=(batch_length, bat
 # embeddings is (batch_length, batch_depth, embedding_size)
 embeddings = tf.nn.embedding_lookup(w_embedding, inputs) # get embeddings from raw bytes
 
-embeddings = tf.Print(
-    embeddings, [tf.shape(embeddings)], message="embeddings shape: ")
+# embeddings = tf.Print(
+#     embeddings, [tf.shape(embeddings)], message="embeddings shape: ")
 
 d_batch = tf.shape(embeddings)[1] # dynamic batch size
 
@@ -113,7 +113,6 @@ with tf.Session() as sess:
 
   print "{} to process string ".format(time.time() - tstart)
 
-
 # create the animation
 fig = plt.figure(figsize=(20,10))
 ax = plt.axes(xlim=(0, 2048), ylim=(-10, 10))
@@ -123,25 +122,18 @@ line, = ax.plot([], [], lw=2)
 title = ax.text(0.5,0.85, "", bbox={'facecolor':'w', 'alpha':0.5, 'pad':5},
                 transform=ax.transAxes, ha="center")
 
-# initialization function: plot the background of each frame
 def init():
     line.set_data([], [])
     return line,
 
-# animation function.  This is called sequentially
 def animate(i):
     title.set_text(text[0:i])
     line.set_data(range(len(feature[i])), feature[i])
     return line, title,
 
-# call the animator.  blit=True means only re-draw the parts that have changed.
 anim = animation.FuncAnimation(fig, animate, init_func=init,
                                frames=len(text), interval=200, blit=True)
 
-# save the animation as an mp4.  This requires ffmpeg or mencoder to be
-# installed.  The extra_args ensure that the x264 codec is used, so that
-# the video can be embedded in html5.  You may need to adjust this for
-# your system: for more information, see
-# http://matplotlib.sourceforge.net/api/animation_api.html
-# anim.save('basic_animation.mp4', fps=30, extra_args=['-vcodec', 'libx264'])
+# anim.save('lstmanim.gif', writer='imagemagick', fps=60)
+
 plt.show()

@@ -9,7 +9,6 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.rnn.python.ops.rnn_cell import MLSTMCell
 
-#TODO this is a bit messy
 from featurizer_utils import parse_docs, memory_usage_resource, initialize_variables, create_example, sort_files
 import utils
 
@@ -19,13 +18,13 @@ parser.add_argument(
     '--input_data', type=str, default="datasets/preprocessed/CR_Data",
     help="Path to directory containing preprocessed dataset")
 parser.add_argument(
-    '--checkpoint', type=str, default="checkpoints/openai_list/model.npy",
+    '--checkpoint', type=str, default="/Users/jonathan/Desktop/openai_experiments/checkpoints/openai_list/model.npy",
     help="Path to directory containing language model checkpoint")
 parser.add_argument(
     '--output_dir', type=str, default="test",
     help="Directory to store features")
 parser.add_argument(
-    '--insert_padding', type=int, default=0,
+    '--insert_padding', type=int, default=1,
     help="Option to pad each input sentence")
 parser.add_argument(
     '--munge_data', type=int, default=0,
@@ -162,7 +161,7 @@ with tf.Session() as sess:
   sess.run(tf.global_variables_initializer())
   sess.run(init_op) # this initializes the weights from numpy file checkpoint
 
-  filenames = [os.listdir(input_data)]
+  filenames = os.listdir(input_data)
   # filenames = [os.listdir(input_data)[-1]] #HACK for munging test sets only
 
   for file in filenames:
