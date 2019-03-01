@@ -176,14 +176,14 @@ func main() {
 	}
 	idMap := map[string]string{"gl": "Gold & Lo", "gh": "Gold & Hi", "ll": "Lo & Lo", "hl": "Hi & Lo", "hh": "Hi & Hi"}
 	for _, config := range []string{"gl", "gh", "ll", "hl", "hh"} {
-		fmt.Printf("%s & ", idMap[config])
-		computeFixedEffects("&", feRecall[config])
-		computeFixedEffects("&", fePrecision[config])
-		computeFixedEffects("&", feKappa[config])
-		computeFixedEffects("&", feOverlap[config])
-		computeFixedEffects("&", fegRecall[config])
-		computeFixedEffects("&", fegPrecision[config])
-		computeFixedEffects("\\\\", fegOverlap[config])
+		fmt.Printf("%s\t", idMap[config])
+		computeFixedEffects("\t", feRecall[config])
+		computeFixedEffects("\t", fePrecision[config])
+		computeFixedEffects("\t", feKappa[config])
+		computeFixedEffects("\t", feOverlap[config])
+		computeFixedEffects("\t", fegRecall[config])
+		computeFixedEffects("\t", fegPrecision[config])
+		computeFixedEffects("\t", fegOverlap[config])
 		fmt.Println()
 	}
 

@@ -104,6 +104,10 @@ func mergeSeen(seen, new []span) []span {
 	}
 	return ret
 }
+
+// spanUniqueTP ensures that we do not double count a true positive when we have one annotator
+// producing large annotations and another producing many small.
+// This ensures a symmetric counting of true positives.
 func spanUniqueTP(gold []span, pred []span) uint32 {
 	count := uint32(0)
 	seen := []span{}
@@ -117,6 +121,9 @@ func spanUniqueTP(gold []span, pred []span) uint32 {
 	return count
 }
 
+// spanTP simply counts the number of true positives. However, it will potentially "double count"
+// cases where one annotator produces larger annotations and another many small ones in the same area.
+// Using this naively can yield non-symmetric results in measures like Cohen's Kappa.
 func spanTP(gold []span, pred []span) uint32 {
 	count := uint32(0)
 	for _, s := range gold {
@@ -147,6 +154,10 @@ func spanFP(gold []span, pred []span) uint32 {
 	return count
 }
 
+// spanTN returns the number of true negative spans (i.e., ones where both annator agreed that
+// the material shouldn't be highlighted). Note that in the interest of simplicity (sort of), it
+// is easier to figure out the entire coverage of a document (i.e., what either annotator highlighted)
+// and figure out the gaps (i.e., true negatives) from there.
 func spanTN(gold []span, pred []span) uint32 {
 	mergedSpans := []span{}
 	for _, g := range gold {
