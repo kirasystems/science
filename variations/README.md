@@ -16,7 +16,7 @@ For simplicity, we will also assume the data for the study is located in `study-
 
 ## Human Annotator Agreement
 
-To replicate the results from Tables 2 and 3 of the paper, one simply needs the command: `./agree study-data/annotator-results study-data/annotator-docs.txt`.
+To replicate the results from Tables 2 and 3 of the paper, one simply needs the command: `./agree study-data/annotator-docs.txt study-data/annotator-results`.
 
 This will output a 5 by 8 tab separate matrix of scores for Assesor Combination, Reecall, Precision, Cohen's Kappa, Overlap, Granular Recall, Granular Precision, and Granular Overlap.
 
