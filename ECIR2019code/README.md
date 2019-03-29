@@ -62,3 +62,15 @@ The script `animate.py` can be used to generate an animation of the hidden cell 
 ![](lstmanim.gif)
 
 Please feel free to contact me at jonny.donnelly@kirasystems.com if you have any questions!
+
+### Errata
+
+Figure 2 in the paper contains an error. The horizontal red line on the plot is slightly higher than it should be due to the y axis scale on the right hand side being slightly different than the left hand side. The is a minor error and does not substantively change the results or any inference drawn from them. Below are the original and corrected versions of the plot.
+
+Original (from paper):
+
+![alt text](Fig2_original.png)
+
+Corrected:
+
+![alt text](Fig2_corrected.png)

@@ -4,3 +4,4 @@ cmp*
 *.pyc
 compare_final_states.py
 test
+.DS_Store
