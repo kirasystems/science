@@ -11,8 +11,8 @@ import time
 LINE_RE = "[ ]*([0-9]+)[ ](.*)[\n]"
 HASH_FUNCTIONS = hashlib.algorithms_available
 Feature = collections.namedtuple('Feature', ['ngram', 'count', 'hashes', 'randvec'])
-TOPSIG_LENGTHS = [32, 64, 128, 256, 512, 1024, 2048]
-TOPSIG_PROB = [1/16.0, 1/16.0, 1/16.0, 1/16.0, 1/32.0, 1/32.0, 1/64.0]
+TOPSIG_LENGTHS = [16, 32, 64, 128, 256, 512, 1024, 2048]
+TOPSIG_PROB = [1/16.0, 1/16.0, 1/16.0, 1/16.0, 1/16.0, 1/32.0, 1/32.0, 1/64.0]
 
 def mksparsevec(length, prob):
     "Makes a sparse vector, with probability `prob` of having an entry be +/-1."
