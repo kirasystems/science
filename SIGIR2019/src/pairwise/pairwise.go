@@ -32,7 +32,7 @@ func countLength(bi *big.Int) int {
 
 func doPairwise(hashes []*big.Int, threshold int, l int, u int) {
 	counts := map[int]int{}
-	if u > len(hashes) {
+	if u > len(hashes) || u < 0 {
 		u = len(hashes)
 	}
 	for i := l; i < u; i++ {
