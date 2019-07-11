@@ -35,7 +35,6 @@ We are concerned with investigating the apparent effective-ness of Radford et al
 
 ## On Tradeoffs Between Document Signature Methods for A Legal Due Diligence Corpus
 *Adam Roegiest and Edward Lee*
-
 SIGIR 2019
 
 Code [here](SIGIR2019/README.md)
