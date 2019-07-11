@@ -34,7 +34,7 @@ Code [here](ECIR2019code/README.md)
 We are concerned with investigating the apparent effective-ness of Radford et al.’s “Sentiment Neuron,” [9] which they claim encapsulates sufficient knowledge to accurately predict sentiment in reviews.In our analysis of the Sentiment Neuron, we find that the removal of theneuron only marginally affects a classifier’s ability to detect and label sentiment and may even improve performance. Moreover, the effectiveness of the Sentiment Neuron can be surpassed by simply using 100 randomneurons as features to the same classifier. Using adversarial examples, we show that the generated representation containing the Sentiment Neuron(i.e., the final hidden cell state in a LSTM) is particularly sensitive to the end of a processed sequence. Accordingly, we find that caution needs to be applied when interpreting neuron-based feature representations and potential flaws should be addressed for real-world applicability
 
 ## On Tradeoffs Between Document Signature Methods for A Legal Due Diligence Corpus
-*Adam Roegiest and Edward Lee*   
+*Adam Roegiest and Edward Lee*  
 SIGIR 2019
 
 Code [here](SIGIR2019/README.md)
