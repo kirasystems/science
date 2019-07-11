@@ -39,7 +39,7 @@ We have provided a tool `pairwise` to analyze the pairwise similarity of hashes 
 
 To use: ```./pairwise list-of-files.txt d start-offset end-offset```
 - `list-of-files.txt` -- list of output hash files produced by the `minhash`, `topsig`, `topsig-weighted`, and `simhash` methods.
-- `d` -- Maxiximum Hamming distance to print similarity statistics for.
+- `d` -- Maximum Hamming distance to print similarity statistics for.
 - `start-offset` -- Index of first hash to print statistics for.  Usually `0`, but can be otherwise if you plan to split the computation of pairwise similarity over multiple `pairwise` invocations.
 - `end-offset` -- Index immediately _after_ the last hash to print statistics for.  Use `-1` to compute statistics for every hash after and including the hash at `start-offset`.
 
