@@ -49,4 +49,29 @@ To use: ```./pairwise list-of-files.txt d start-offset end-offset```
 
 # Getting EDGAR documents
 
-TODO
+ To begin retrieving EDGAR documents, you must first download a particular year's file lists using the SEC's public web frontend.
+ ```bash
+!/bin/bash
+year=2005
+for quarter in 1 2 3 4
+do
+  base="https://www.sec.gov/Archives/edgar/Oldloads/${year}/QTR${quarter}/"
+  curl $base  | egrep -o '[0-9]+\.gz' > files
+  sed -e "s_^_${base}_" files >> all.files
+done
+ ```
+
+For each line in `all.files`, you can download the archive containing documents for a particular day in that quarter.
+
+```bash
+#!/bin/bash
+
+for line in $(cat ${all.files})
+do
+  echo $line
+  wget -P edgar-data $line
+  sleep 15s # To play nicely with SEC servers
+done
+```
+
+The resulting files are approximately XML files (with some added cruft), so you will likely need to do some custom parsing. For our purposes, we rendered only the HTML documents into PDF using `wkhtmltopdf` and then running those resulting documents through our internal OCR engine to replicate the user experience. We note that PDFs are present in the XML files and are Uuencoded. The Golang library `uuencode` by `sanylcs` is what we have found to work best. 
