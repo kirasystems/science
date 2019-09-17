@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/spaolacci/murmur3"
+	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -53,57 +53,30 @@ func new(size int) *digest {
 
 // Write implements the io.Writer interface
 func (d *digest) Write(p []string) (n int, err error) {
-
-	// text := append(d.last3Bits, p...)
-	// text = normalizeWhitespace(text)
-
 	i := 0
 	for ; i < len(p); i++ {
-		// b := make([]byte, d.size)
-		// sha3.ShakeSum256(b, []byte(p[i]))
+		b := make([]byte, d.size)
+		sha3.ShakeSum256(b, []byte(p[i]))
 
-		if err != nil {
-			return 0, err
-		}
-		murmur := murmur3.New128()
-		murmur.Write([]byte(p[i]))
-		v1, v2 := murmur.Sum128()
-
-		for k := 64; k < 128; k++ {
-			if v1&(1<<uint8(k-64)) == 0 {
-				d.hashBitCounts[k]--
-			} else {
-				d.hashBitCounts[k]++
+		for i := 0; i < d.size; i++ {
+			reverseIndex := 127 - i
+			for j := 0; j < 8; j++ {
+				if b[reverseIndex]&(1<<uint8(j)) == 0 {
+					d.hashBitCounts[i*8+j]--
+				} else {
+					d.hashBitCounts[i*8+j]++
+				}
 			}
 		}
-
-		for k := 0; k < 64; k++ {
-			if v2&(1<<uint8(k)) == 0 {
-				d.hashBitCounts[k]--
-			} else {
-				d.hashBitCounts[k]++
-			}
-		}
-		// for i := 0; i < d.size; i++ {
-		// 	reverseIndex := 127 - i
-		// 	for j := 0; j < 8; j++ {
-		// 		if b[reverseIndex]&(1<<uint8(j)) == 0 {
-		// 			d.hashBitCounts[i*8+j]--
-		// 		} else {
-		// 			d.hashBitCounts[i*8+j]++
-		// 		}
-		// 	}
-		// }
 	}
 
 	return len(p), nil
 }
 
-// Sum128 returns the current hash as a unsigned 64 bit integer
-func (d *digest) Sum128() (digest *big.Int) {
+// Sum returns the current hash as a big integer
+func (d *digest) Sum() (digest *big.Int) {
 	d1 := *d // copy - don't update underlying state
 	digest = big.NewInt(0)
-	//d1.addFeature(d1.last3Bits)
 
 	for k := (sizeBits) - 1; k >= 0; k-- {
 		if d1.hashBitCounts[k] > 0 {
@@ -140,7 +113,7 @@ func makeSimhash(inFile string, hashLength int) {
 	d := new(hashLength)
 	s := time.Now()
 	d.Write(vals)
-	v := d.Sum128()
+	v := d.Sum()
 	elapsed := time.Now().Sub(s).Seconds()
 	fmt.Println(len(vals), v, countLength(v), elapsed)
 }
