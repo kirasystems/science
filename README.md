@@ -43,6 +43,7 @@ While document signatures are a well established tool in IR, they have primarily
 
 ## Spectator: An Open Source Document Viewer
 *Jean-Phillipe Gauthier and Adam Roegiest*
+
 CHIIR 2020
 
 Code [here](https://github.com/kirasystems/spectator)
