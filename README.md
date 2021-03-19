@@ -40,3 +40,10 @@ SIGIR 2019
 Code [here](SIGIR2019/README.md)
 
 While document signatures are a well established tool in IR, they have primarily been investigated in the context of web documents. Legal due diligence documents, by their nature, have more similar structure and language than we may expect out of standard web collections. Moreover, many due diligence systems strive to facilitate real-time interactions and so time from document ingestion to availability should be minimal. Such constraints further limit the possible solution space when identifying near duplicate documents. We present an examination of the tradeoffs that document signature methods face in the due diligence domain. In particular, we quantify the trade-off between signature length, time to compute, number of hash collisions, and number of nearest neighbours for a 90,000 document due diligence corpus.
+
+## Spectator: An Open Source Document Viewer
+Jean-Phillipe Gauthier and Adam Roegiest
+CHIIR 2020
+Code [here](https://github.com/kirasystems/spectator)
+
+Many information retrieval tasks require viewing documents in some manner, whether this is to view information in context or to provide annotations for some downstream task (e.g., evaluation or system training). Building a high-quality document viewer often exceeds the resources of many researchers and so, in this paper, we describe the design and architecture of our new open-source document viewer, Spectator. In particular, we provide a look into the algorithmic details of how Spectator accomplishes tasks like mapping annotations back to the canonical document. Moreover, we provide a sampling of the use cases that we envision for Spectator, potential future additions depending on community need and support, and highlight situations where Spectator may not be a good fit. Furthermore, we provide a brief description of the sample application that we bundle with Spectator to demonstrate how one might use it within the context of a larger system.
